@@ -7,7 +7,7 @@ export function Ant(position, orientation){
 export function update(field, ant){
     let coordinate = document.getElementById("".concat("x: ", ant.position.x, " y: ", ant.position.y))
     coordinate.classList.remove('red')
-    if(!(ant.position.x > 199 || ant.position.y > 199)){
+    if(!(ant.position.x > 199 || ant.position.y > 199 || ant.position.x < 1 || ant.position.y <1)){
 
         if(ant.orientation == "north" && !coordinate.classList.contains('black')){                           //if its on white heading north
             ant.position.y = ant.position.y - 1

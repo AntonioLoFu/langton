@@ -1,14 +1,14 @@
 import {update as updateAnt, draw as drawAnt, Ant} from './antClass.js'
 
-const ANT_SPEED = 100000
 const field = document.getElementById('field')
 let iteration = 0 
-let lastRenderTime = 0 
 let PAUSE = false
 let DRAWCELLS = false
-
+let DELAY = 100
 document.getElementById("buttonPause").addEventListener("click", pauseAnt, false)
 document.getElementById("buttonFillCells").addEventListener("click", changeBehaviourClick, false)
+document.getElementById("buttonMoreSpeed").addEventListener("click", addSpeed, false)
+document.getElementById("buttonLessSpeed").addEventListener("click", subSpeed, false)
 fillField(200)
 let antArray = []
 
@@ -19,6 +19,15 @@ window.onclick = e => {
         changeCellColor(e)
     }
 } 
+
+function addSpeed(){
+    if(DELAY <= 4) return
+    DELAY = DELAY - 100
+}
+
+function subSpeed(){
+    DELAY = DELAY + 100
+}
 
 function changeCellColor(e){
     const x = parseInt(e.target.id.split(" ")[1])
@@ -46,24 +55,19 @@ function addAnt(e){
     antArray.push(ant)
 }
 
-function main(currentTime){
-    window.requestAnimationFrame(main)
-    const secondsSinceLastRender = (currentTime - lastRenderTime) / 1000
-    if(!PAUSE){
 
-        if (secondsSinceLastRender < 1/ANT_SPEED) return 
-        
-        lastRenderTime = currentTime
+
+function main(){
+        if(!PAUSE){
+            draw() 
+            update()
+        }
+        console.log(DELAY)
+        let timer = setTimeout(main, DELAY)
     
-        draw() 
-    
-        update()
-    
-        ++iteration
-    }
 }    
 
-
+main()
 
 
     //console.log (iteration)  
@@ -93,12 +97,6 @@ function changeBehaviourClick(){
         boton.firstChild.data = "Añadir hormigas"
     }
 }
-
-function zoomIn(){
-    
-}
-
-
     
 
 function draw(){
@@ -121,7 +119,5 @@ function fillField(size){
     }
 }
 
-
-window.requestAnimationFrame(main)
 
 
