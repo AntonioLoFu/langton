@@ -4,50 +4,116 @@ const ANT_SPEED = 100000
 const field = document.getElementById('field')
 let iteration = 0 
 let lastRenderTime = 0 
+let PAUSE = false
+let DRAWCELLS = false
 
+document.getElementById("buttonPause").addEventListener("click", pauseAnt, false)
+document.getElementById("buttonFillCells").addEventListener("click", changeBehaviourClick, false)
 fillField(200)
 let antArray = []
 
 window.onclick = e => {
+    if(!DRAWCELLS){
+        addAnt(e)
+    }else{
+        changeCellColor(e)
+    }
+} 
+
+function changeCellColor(e){
+    const x = parseInt(e.target.id.split(" ")[1])
+    const y = parseInt(e.target.id.split(" ")[3])
+    if(isNaN(x)||isNaN(y)){
+        return
+    }
+    let coordinate = document.getElementById("".concat("x: ", x.toString(), " y: ",y.toString()))
+    if(coordinate.classList.contains('black')){
+        coordinate.classList.remove('black')
+    }else{
+        coordinate.classList.add('black')
+    }
+
+}
+function addAnt(e){
     const antx = parseInt(e.target.id.split(" ")[1])
     const anty = parseInt(e.target.id.split(" ")[3])
     if(isNaN(antx)||isNaN(anty)){
         return
     }
     const ant = new Ant({x: antx , y: anty }, "north")
-    antArray.push(ant)    
-} 
+    let coordinate = document.getElementById("".concat("x: ", ant.position.x.toString(), " y: ", ant.position.y.toString()))
+    coordinate.classList.add('red')
+    antArray.push(ant)
+}
 
 function main(currentTime){
     window.requestAnimationFrame(main)
     const secondsSinceLastRender = (currentTime - lastRenderTime) / 1000
-    if (secondsSinceLastRender < 1/ANT_SPEED) return 
+    if(!PAUSE){
+
+        if (secondsSinceLastRender < 1/ANT_SPEED) return 
+        
+        lastRenderTime = currentTime
     
-    lastRenderTime = currentTime
+        draw() 
+    
+        update()
+    
+        ++iteration
+    }
+}    
 
-    draw() 
 
-    update()
 
-    ++iteration
 
     //console.log (iteration)  
-}
 
 function update(){
     antArray.forEach(ant => updateAnt(field, ant));
 }
+
+function pauseAnt(){
+    PAUSE = !PAUSE
+    let boton = document.getElementById("buttonPause")
+    if(PAUSE){
+        
+        boton.firstChild.data = "Reanudar"
+    }else{
+        boton.firstChild.data = "Pausar"
+
+    }
+}
+
+function changeBehaviourClick(){
+    DRAWCELLS = !DRAWCELLS
+    let boton = document.getElementById("buttonFillCells")
+    if(!DRAWCELLS){
+        boton.firstChild.data = "Pintar Celdas"
+    }else{
+        boton.firstChild.data = "Añadir hormigas"
+    }
+}
+
+function zoomIn(){
+    
+}
+
+
     
 
 function draw(){
     antArray.forEach(ant => drawAnt(field, ant));
 }
 
+
+
 function fillField(size){
+    
     for (let x = 0; x <= size; x++) {    
         for (let y = 0; y <= size; y++) {
             const tile = document.createElement('div')
             tile.id = "".concat("x: ", x, " y: ", y)
+            tile.className = "dontDisplayGrid"
             tile.style.gridRowStart = x 
             tile.style.gridColumnStart = y 
             field.appendChild(tile)
@@ -57,3 +123,5 @@ function fillField(size){
 
 
 window.requestAnimationFrame(main)
+
+

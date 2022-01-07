@@ -29,11 +29,33 @@
         .black{
             background-color: black;
         }
+        .red{
+            background-color: red;
+        }
+        .controles{
+            display:flex;
+            padding-left: 5em;
+            flex-direction:column;
+            align-items: center;
+            
+        }
+        .controles__boton{
+            margin-bottom: 2em;
+        }
+        .displayGrid{
+            border: 1px solid black;
+        }
         
     </style>
     <script src = "main.js" defer type = "module"></script>
 </head>
 <body>
     <div id = "field"></div>
+    <div class = "controles">
+        <button class = "controles__boton" id = "buttonPause">Pausar</button>
+        <button class = "controles__boton" id = "buttonMoreSpeed">Incrementar velocidad</button>
+        <button class = "controles__boton" id = "buttonLessSpeed">Disminuir velocidad</button>
+        <button class = "controles__boton" id = "buttonFillCells">Pintar celdas</button>
+    </div>
 </body>
 </html>
